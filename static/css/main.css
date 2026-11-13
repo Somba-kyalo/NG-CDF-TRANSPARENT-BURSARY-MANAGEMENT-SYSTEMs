@@ -1,0 +1,13 @@
+:root {
+  --ngcdf-navy: #0b3a70;
+  --ngcdf-success: #1f9d55;
+  --ngcdf-pending: #f59e0b;
+  --ngcdf-danger: #dc2626;
+}
+.bg-primary {
+  background-color: var(--ngcdf-navy) !important;
+}
+.card {
+  border: 0;
+  box-shadow: 0 0.15rem 0.5rem rgba(11, 58, 112, 0.08);
+}

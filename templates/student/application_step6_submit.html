@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4>Apply for Bursary - Step {{ step }} of 6 (Submission)</h4>
+<div class="card card-body mb-3">
+  <h6>Educational Information</h6>
+  <pre class="mb-2">{{ preview.step2 }}</pre>
+  <h6>Financial Information</h6>
+  <pre class="mb-2">{{ preview.step3 }}</pre>
+  <h6>Uploaded Documents</h6>
+  <pre>{{ preview.files }}</pre>
+</div>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <a class="btn btn-outline-secondary" href="{% url 'applications:step5' %}">Back</a>
+  <button class="btn btn-success" type="submit">Submit Application</button>
+</form>
+{% endblock %}

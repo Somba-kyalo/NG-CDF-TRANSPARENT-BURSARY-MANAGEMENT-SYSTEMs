@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Reporting and Analytics</h4>
+  <div>
+    <a class="btn btn-outline-success" href="{% url 'applications:export_applications_csv' %}">Export Applications CSV</a>
+    <a class="btn btn-outline-success" href="{% url 'applications:export_financial_csv' %}">Export Financial CSV</a>
+  </div>
+</div>
+<div class="row g-3 mb-3">
+  <div class="col-md-6"><div class="card card-body"><strong>Total Budget:</strong> KES {{ total_budget }}</div></div>
+  <div class="col-md-6"><div class="card card-body"><strong>Total Allocated:</strong> KES {{ total_allocated }}</div></div>
+</div>
+<div class="row g-3">
+  <div class="col-lg-6"><div class="card card-body"><canvas id="applicationsPerYear"></canvas></div></div>
+  <div class="col-lg-6"><div class="card card-body"><canvas id="statusSplit"></canvas></div></div>
+  <div class="col-lg-6"><div class="card card-body"><canvas id="institutionSplit"></canvas></div></div>
+  <div class="col-lg-6"><div class="card card-body"><canvas id="budgetUsage"></canvas></div></div>
+</div>
+
+{{ chart_data|json_script:"chart-data" }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const d = JSON.parse(document.getElementById('chart-data').textContent);
+new Chart(document.getElementById('applicationsPerYear'), {type:'bar',data:{labels:d.per_year_labels,datasets:[{label:'Applications per year',data:d.per_year_values}]}});
+new Chart(document.getElementById('statusSplit'), {type:'pie',data:{labels:d.status_labels,datasets:[{label:'Status',data:d.status_values}]}});
+new Chart(document.getElementById('institutionSplit'), {type:'bar',data:{labels:d.institution_labels,datasets:[{label:'Applications per institution',data:d.institution_values}]}});
+new Chart(document.getElementById('budgetUsage'), {type:'line',data:{labels:d.budget_labels,datasets:[{label:'Total Budget',data:d.budget_total},{label:'Allocated',data:d.budget_allocated}]}});
+</script>
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3 class="mb-3">Administrator Dashboard</h3>
+<div class="row g-3">
+  <div class="col-md-3"><div class="card p-3"><small>Total Students</small><h5>{{ total_students }}</h5></div></div>
+  <div class="col-md-3"><div class="card p-3"><small>Pending Accounts</small><h5>{{ pending_accounts }}</h5></div></div>
+  <div class="col-md-3"><div class="card p-3"><small>Total Applications</small><h5>{{ total_applications }}</h5></div></div>
+  <div class="col-md-3"><div class="card p-3"><small>Approved Applications</small><h5>{{ approved_applications }}</h5></div></div>
+  <div class="col-md-4"><div class="card p-3"><small>Total Budget</small><h5>KES {{ total_budget }}</h5></div></div>
+  <div class="col-md-4"><div class="card p-3"><small>Allocated Budget</small><h5>KES {{ allocated_budget }}</h5></div></div>
+  <div class="col-md-4"><div class="card p-3"><small>Remaining Budget</small><h5>KES {{ remaining_budget }}</h5></div></div>
+</div>
+<div class="mt-4">
+  <a class="btn btn-outline-primary" href="{% url 'accounts:pending_accounts' %}">Review Pending Accounts</a>
+  <a class="btn btn-outline-primary" href="{% url 'applications:admin_queue' %}">Application Management</a>
+  <a class="btn btn-outline-secondary" href="{% url 'applications:analytics' %}">Reports & Analytics</a>
+</div>
+{% endblock %}

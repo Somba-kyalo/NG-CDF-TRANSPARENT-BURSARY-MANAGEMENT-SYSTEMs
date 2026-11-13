@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4>Manage Application {{ application.reference_number }}</h4>
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="card card-body">
+      <h6>Status Update</h6>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="update_status">
+        <div class="mb-2"><label class="form-label">New Status</label><select name="new_status" class="form-select">
+          {% for value,label in application.Status.choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+        </select></div>
+        <div class="mb-2"><label class="form-label">Remarks</label><textarea name="remarks" class="form-control"></textarea></div>
+        <button class="btn btn-primary">Update Status</button>
+      </form>
+    </div>
+
+    <div class="card card-body mt-3">
+      <h6>Declare Conflict of Interest</h6>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="declare_conflict">
+        {{ conflict_form.as_p }}
+        <button class="btn btn-warning">Declare Conflict</button>
+      </form>
+      <ul class="mt-3">
+        {% for conflict in conflicts %}
+          <li>{{ conflict.administrator.full_name }} - {{ conflict.reason }}</li>
+        {% empty %}
+          <li class="text-muted">No conflicts declared.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="card card-body">
+      <h6>Award Allocation Controls</h6>
+      <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="allocate_award">
+        {{ award_form.as_p }}
+        <button class="btn btn-success">Save Allocation</button>
+      </form>
+      {% if has_award %}
+      <div class="alert alert-info mt-2">Current approved amount: KES {{ application.award.amount_approved }}</div>
+      {% endif %}
+    </div>
+
+    <div class="card card-body mt-3">
+      <h6>Supporting Documents</h6>
+      <ul>
+      {% for doc in documents %}
+        <li>{{ doc.get_document_type_display }}</li>
+      {% empty %}
+        <li class="text-muted">No documents uploaded.</li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-header">Status Timeline</div>
+  <ul class="list-group list-group-flush">
+  {% for item in timeline %}
+    <li class="list-group-item">{{ item.previous_status }} → {{ item.new_status }} | {{ item.changed_at|date:'Y-m-d H:i' }} | {{ item.remarks }}</li>
+  {% empty %}
+    <li class="list-group-item text-muted">No timeline events yet.</li>
+  {% endfor %}
+  </ul>
+</div>
+{% endblock %}

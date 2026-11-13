@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3 class="mb-3">Welcome back, {{ request.user.full_name }}!</h3>
+<div class="row g-3 mb-4">
+  <div class="col-md-2"><div class="card p-3"><small>Total Applications</small><h5>{{ total_applications }}</h5></div></div>
+  <div class="col-md-2"><div class="card p-3"><small>Pending</small><h5>{{ pending_applications }}</h5></div></div>
+  <div class="col-md-2"><div class="card p-3"><small>Approved</small><h5>{{ approved_applications }}</h5></div></div>
+  <div class="col-md-2"><div class="card p-3"><small>Rejected</small><h5>{{ rejected_applications }}</h5></div></div>
+  <div class="col-md-4"><div class="card p-3"><small>Total Awarded</small><h5>KES {{ awarded_total }}</h5></div></div>
+</div>
+
+<div class="row g-3">
+  <div class="col-lg-8">
+    <div class="card">
+      <div class="card-header">Recent Applications</div>
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead><tr><th>Reference</th><th>Academic Year</th><th>Institution</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for app in recent_applications %}
+            <tr><td>{{ app.reference_number }}</td><td>{{ app.academic_year }}</td><td>{{ app.institution }}</td><td>{{ app.get_status_display }}</td></tr>
+            {% empty %}
+            <tr><td colspan="4" class="text-center text-muted">No applications yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card mb-3">
+      <div class="card-header">Quick Actions</div>
+      <div class="card-body d-grid gap-2">
+        <a class="btn btn-primary btn-sm" href="{% url 'applications:step1' %}">Apply for Bursary</a>
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'applications:list' %}">View My Applications</a>
+        <a class="btn btn-outline-secondary btn-sm" href="{% url 'accounts:profile' %}">Update Profile</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">Announcements</div>
+      <ul class="list-group list-group-flush">
+        {% for item in announcements %}
+          <li class="list-group-item"><strong>{{ item.title }}</strong><br><small>{{ item.created_at|date:'M d, Y' }}</small></li>
+        {% empty %}
+          <li class="list-group-item text-muted">No announcements available.</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="card mt-3">
+      <div class="card-header">Important Dates</div>
+      <ul class="list-group list-group-flush">
+        {% for period in important_dates %}
+          <li class="list-group-item">
+            <strong>{{ period.name }}</strong><br>
+            <small>Open: {{ period.opens_on }} | Close: {{ period.closes_on }}</small>
+          </li>
+        {% empty %}
+          <li class="list-group-item text-muted">No active application periods.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

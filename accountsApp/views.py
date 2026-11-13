@@ -11,6 +11,7 @@ from accountsApp.forms import EmailLoginForm, StudentProfileForm, StudentRegistr
 from accountsApp.models import AccountApproval, CustomUser
 from announcementsApp.models import Announcement
 from applicationsApp.models import BursaryApplication
+from bursariesApp.models import ApplicationPeriod, BursaryBudget
 from notificationsApp.models import Notification
 
 
@@ -100,6 +101,7 @@ def student_dashboard_view(request: HttpRequest) -> HttpResponse:
     applications = BursaryApplication.objects.filter(student=request.user)
     recent_applications = applications.order_by("-created_at")[:5]
     announcements = Announcement.objects.filter(is_active=True)[:5]
+    important_dates = ApplicationPeriod.objects.filter(is_active=True).order_by("opens_on")[:5]
 
     context = {
         "total_applications": applications.count(),
@@ -109,6 +111,7 @@ def student_dashboard_view(request: HttpRequest) -> HttpResponse:
         "awarded_total": sum(float(app.award.amount_approved) for app in applications.select_related("award") if hasattr(app, "award")),
         "recent_applications": recent_applications,
         "announcements": announcements,
+        "important_dates": important_dates,
     }
     return render(request, "student/dashboard.html", context)
 
@@ -118,6 +121,7 @@ def student_dashboard_view(request: HttpRequest) -> HttpResponse:
 def admin_dashboard_view(request: HttpRequest) -> HttpResponse:
     students = CustomUser.objects.filter(role=CustomUser.Role.STUDENT)
     applications = BursaryApplication.objects.all()
+    budgets = BursaryBudget.objects.all()
     context = {
         "total_students": students.count(),
         "pending_accounts": students.filter(account_status=CustomUser.AccountStatus.PENDING).count(),
@@ -127,6 +131,9 @@ def admin_dashboard_view(request: HttpRequest) -> HttpResponse:
         "pending_applications": applications.filter(status__in=["SUBMITTED", "UNDER_REVIEW"]).count(),
         "approved_applications": applications.filter(status="APPROVED").count(),
         "rejected_applications": applications.filter(status="REJECTED").count(),
+        "total_budget": sum(float(b.total_budget) for b in budgets),
+        "allocated_budget": sum(float(b.allocated_amount) for b in budgets),
+        "remaining_budget": sum(float(b.remaining_balance) for b in budgets),
     }
     return render(request, "admin/dashboard.html", context)
 

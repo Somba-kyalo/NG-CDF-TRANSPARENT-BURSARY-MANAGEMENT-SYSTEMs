@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>My Applications</h4>
+  <a class="btn btn-primary" href="{% url 'applications:step1' %}">Apply for Bursary</a>
+</div>
+<form method="get" class="mb-3">
+  <select name="status" onchange="this.form.submit()" class="form-select w-auto d-inline">
+    <option value="">All statuses</option>
+    {% for value,label in statuses %}
+      <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+</form>
+<table class="table table-striped bg-white">
+  <thead><tr><th>Reference</th><th>Academic Year</th><th>Institution</th><th>Status</th><th>Requested</th><th></th></tr></thead>
+  <tbody>
+  {% for app in applications %}
+    <tr>
+      <td>{{ app.reference_number }}</td>
+      <td>{{ app.academic_year }}</td>
+      <td>{{ app.institution.name }}</td>
+      <td>{{ app.get_status_display }}</td>
+      <td>KES {{ app.amount_requested }}</td>
+      <td><a class="btn btn-sm btn-outline-primary" href="{% url 'applications:detail' app.id %}">View</a></td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="6" class="text-center text-muted">No applications found.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

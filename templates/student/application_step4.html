@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4>Apply for Bursary - Step {{ step }} of 6 (Supporting Documents)</h4>
+<form method="post" enctype="multipart/form-data" class="card card-body">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <small class="text-muted">Accepted formats: PDF/JPG/JPEG/PNG. Max size per file: 5MB.</small>
+  <div class="d-flex gap-2 mt-3">
+    <a class="btn btn-outline-secondary" href="{% url 'applications:step3' %}">Back</a>
+    <button class="btn btn-primary" type="submit">Continue</button>
+  </div>
+</form>
+{% endblock %}

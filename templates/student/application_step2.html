@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4>Apply for Bursary - Step {{ step }} of 6 (Educational Information)</h4>
+<form method="post" class="card card-body">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary" href="{% url 'applications:step1' %}">Back</a>
+    <button class="btn btn-primary" type="submit">Continue</button>
+  </div>
+</form>
+{% endblock %}

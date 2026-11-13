@@ -28,6 +28,14 @@
     </div>
   </div>
   <div class="col-lg-4">
+    <div class="card mb-3">
+      <div class="card-header">Quick Actions</div>
+      <div class="card-body d-grid gap-2">
+        <a class="btn btn-primary btn-sm" href="{% url 'applications:step1' %}">Apply for Bursary</a>
+        <a class="btn btn-outline-primary btn-sm" href="{% url 'applications:list' %}">View My Applications</a>
+        <a class="btn btn-outline-secondary btn-sm" href="{% url 'accounts:profile' %}">Update Profile</a>
+      </div>
+    </div>
     <div class="card">
       <div class="card-header">Announcements</div>
       <ul class="list-group list-group-flush">
@@ -35,6 +43,19 @@
           <li class="list-group-item"><strong>{{ item.title }}</strong><br><small>{{ item.created_at|date:'M d, Y' }}</small></li>
         {% empty %}
           <li class="list-group-item text-muted">No announcements available.</li>
+        {% endfor %}
+      </ul>
+    </div>
+    <div class="card mt-3">
+      <div class="card-header">Important Dates</div>
+      <ul class="list-group list-group-flush">
+        {% for period in important_dates %}
+          <li class="list-group-item">
+            <strong>{{ period.name }}</strong><br>
+            <small>Open: {{ period.opens_on }} | Close: {{ period.closes_on }}</small>
+          </li>
+        {% empty %}
+          <li class="list-group-item text-muted">No active application periods.</li>
         {% endfor %}
       </ul>
     </div>

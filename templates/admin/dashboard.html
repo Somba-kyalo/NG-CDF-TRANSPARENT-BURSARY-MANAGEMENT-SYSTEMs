@@ -1,18 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<h3 class="mb-3">Administrator Dashboard</h3>
-<div class="row g-3">
-  <div class="col-md-3"><div class="card p-3"><small>Total Students</small><h5>{{ total_students }}</h5></div></div>
-  <div class="col-md-3"><div class="card p-3"><small>Pending Accounts</small><h5>{{ pending_accounts }}</h5></div></div>
-  <div class="col-md-3"><div class="card p-3"><small>Total Applications</small><h5>{{ total_applications }}</h5></div></div>
-  <div class="col-md-3"><div class="card p-3"><small>Approved Applications</small><h5>{{ approved_applications }}</h5></div></div>
-  <div class="col-md-4"><div class="card p-3"><small>Total Budget</small><h5>KES {{ total_budget }}</h5></div></div>
-  <div class="col-md-4"><div class="card p-3"><small>Allocated Budget</small><h5>KES {{ allocated_budget }}</h5></div></div>
-  <div class="col-md-4"><div class="card p-3"><small>Remaining Budget</small><h5>KES {{ remaining_budget }}</h5></div></div>
-</div>
-<div class="mt-4">
-  <a class="btn btn-outline-primary" href="{% url 'accounts:pending_accounts' %}">Review Pending Accounts</a>
-  <a class="btn btn-outline-primary" href="{% url 'applications:admin_queue' %}">Application Management</a>
-  <a class="btn btn-outline-secondary" href="{% url 'applications:analytics' %}">Reports & Analytics</a>
-</div>
+<div class="page-heading"><div><div class="eyebrow">Administration</div><h1>System overview</h1><p class="text-muted mb-0 mt-2">A clear view of applicants, decisions, and available funds.</p></div><a class="btn btn-primary" href="{% url 'applications:admin_queue' %}"><i class="bi bi-inbox me-2" aria-hidden="true"></i>Review applications</a></div>
+<div class="row g-3 mb-4"><div class="col-6 col-lg-3"><div class="card metric-card"><span class="metric-icon"><i class="bi bi-people" aria-hidden="true"></i></span><small>Total students</small><h3>{{ total_students }}</h3></div></div><div class="col-6 col-lg-3"><div class="card metric-card"><span class="metric-icon"><i class="bi bi-person-check" aria-hidden="true"></i></span><small>Pending accounts</small><h3>{{ pending_accounts }}</h3></div></div><div class="col-6 col-lg-3"><div class="card metric-card"><span class="metric-icon"><i class="bi bi-files" aria-hidden="true"></i></span><small>Total applications</small><h3>{{ total_applications }}</h3></div></div><div class="col-6 col-lg-3"><div class="card metric-card"><span class="metric-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span><small>Approved applications</small><h3>{{ approved_applications }}</h3></div></div></div>
+<section class="card mb-4"><div class="card-header">Budget position</div><div class="card-body"><div class="row g-4"><div class="col-md-4"><small class="text-muted">Total budget</small><h3 class="mt-1 fw-bold">KES {{ total_budget }}</h3></div><div class="col-md-4"><small class="text-muted">Allocated</small><h3 class="mt-1 fw-bold">KES {{ allocated_budget }}</h3></div><div class="col-md-4"><small class="text-muted">Remaining</small><h3 class="mt-1 fw-bold text-success">KES {{ remaining_budget }}</h3></div></div></div></section>
+<div class="d-flex flex-wrap gap-2"><a class="btn btn-outline-primary" href="{% url 'accounts:pending_accounts' %}">Review pending accounts</a><a class="btn btn-outline-primary" href="{% url 'applications:admin_queue' %}">Application management</a><a class="btn btn-outline-secondary" href="{% url 'applications:analytics' %}">Reports and analytics</a></div>
 {% endblock %}

@@ -26,9 +26,13 @@ class StudentProfile(models.Model):
         FEMALE = "FEMALE", "Female"
         OTHER = "OTHER", "Other"
 
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="student_profile")
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="student_profile",
+    )
 
-    national_id = models.CharField(max_length=20, unique=True, blank=True)
+    national_id = models.CharField(max_length=20, unique=True, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, choices=Gender.choices, blank=True)
     phone_number = models.CharField(max_length=20, blank=True)
@@ -39,10 +43,16 @@ class StudentProfile(models.Model):
     village = models.CharField(max_length=120, blank=True)
     profile_photo = models.ImageField(upload_to="profiles/", blank=True, null=True)
 
-    institution_type = models.CharField(max_length=20, choices=Institution.InstitutionType.choices, blank=True)
-    institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, null=True, blank=True)
+    institution_type = models.CharField(
+        max_length=20, choices=Institution.InstitutionType.choices, blank=True
+    )
+    institution = models.ForeignKey(
+        Institution, on_delete=models.SET_NULL, null=True, blank=True
+    )
     course = models.CharField(max_length=255, blank=True)
-    qualification = models.CharField(max_length=20, choices=Qualification.choices, blank=True)
+    qualification = models.CharField(
+        max_length=20, choices=Qualification.choices, blank=True
+    )
     year_of_study = models.PositiveSmallIntegerField(null=True, blank=True)
     admission_number = models.CharField(max_length=100, blank=True, db_index=True)
     expected_graduation_year = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -90,7 +100,9 @@ class StudentProfile(models.Model):
         ]
         total_fields = len(fields)
         completed = sum(1 for field in fields if field)
-        self.completion_percentage = int((completed / total_fields) * 100) if total_fields else 0
+        self.completion_percentage = (
+            int((completed / total_fields) * 100) if total_fields else 0
+        )
         return self.completion_percentage
 
     def save(self, *args, **kwargs):

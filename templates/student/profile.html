@@ -1,16 +1,79 @@
 {% extends 'base.html' %}
+{% block title %}My profile · NG-CDF Student Portal{% endblock %}
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h3>My Profile</h3>
-  <span class="badge text-bg-primary">Completion: {{ profile.completion_percentage }}%</span>
-</div>
-<div class="card">
-  <div class="card-body">
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="btn btn-primary">Save Profile</button>
-    </form>
+<div class="page-heading profile-heading">
+  <div>
+    <div class="eyebrow">Your information</div>
+    <h1>My profile</h1>
+    <p class="text-muted mb-0 mt-2">Keep your details current so your bursary application can be reviewed accurately.</p>
+  </div>
+  <div class="profile-completion" aria-label="Profile completion: {{ profile.completion_percentage }} percent">
+    <div class="d-flex justify-content-between gap-4 align-items-center mb-2"><span>Profile completion</span><strong>{{ profile.completion_percentage }}%</strong></div>
+    <div class="progress" role="progressbar" aria-valuenow="{{ profile.completion_percentage }}" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar" style="width: {{ profile.completion_percentage }}%"></div></div>
   </div>
 </div>
+
+<form method="post" enctype="multipart/form-data" class="profile-form">
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="alert alert-danger" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+
+  <section class="profile-section card mb-4" aria-labelledby="identity-heading">
+    <div class="profile-section-header"><div class="section-icon" aria-hidden="true"><i class="bi bi-person-vcard"></i></div><div><h2 id="identity-heading">Personal identity</h2><p>Basic information used to identify you on your application.</p></div></div>
+    <div class="card-body"><div class="row g-4">
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.national_id hint='Your national identification number.' %}</div>
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.profile_photo hint='Use a clear, recent passport-style photo.' %}</div>
+      <div class="col-md-4">{% include 'student/_profile_field.html' with field=form.date_of_birth %}</div>
+      <div class="col-md-4">{% include 'student/_profile_field.html' with field=form.gender %}</div>
+      <div class="col-md-4">{% include 'student/_profile_field.html' with field=form.phone_number hint='A number we can use to contact you.' %}</div>
+    </div></div>
+  </section>
+
+  <section class="profile-section card mb-4" aria-labelledby="location-heading">
+    <div class="profile-section-header"><div class="section-icon" aria-hidden="true"><i class="bi bi-geo-alt"></i></div><div><h2 id="location-heading">Contact and location</h2><p>Where you currently live and can be reached.</p></div></div>
+    <div class="card-body"><div class="row g-4">
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.county %}</div>
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.constituency %}</div>
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.ward %}</div>
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.village %}</div>
+    </div></div>
+  </section>
+
+  <section class="profile-section card mb-4" aria-labelledby="education-heading">
+    <div class="profile-section-header"><div class="section-icon" aria-hidden="true"><i class="bi bi-mortarboard"></i></div><div><h2 id="education-heading">Education details</h2><p>Tell us about your institution and current course of study.</p></div></div>
+    <div class="card-body"><div class="row g-4">
+      <div class="col-md-4">{% include 'student/_profile_field.html' with field=form.institution_type %}</div>
+      <div class="col-md-8">{% include 'student/_profile_field.html' with field=form.institution %}</div>
+      <div class="col-md-8">{% include 'student/_profile_field.html' with field=form.course %}</div>
+      <div class="col-md-4">{% include 'student/_profile_field.html' with field=form.qualification %}</div>
+      <div class="col-md-4">{% include 'student/_profile_field.html' with field=form.year_of_study %}</div>
+      <div class="col-md-8">{% include 'student/_profile_field.html' with field=form.admission_number %}</div>
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.academic_year hint='For example, 2026/2027.' %}</div>
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.expected_graduation_year %}</div>
+    </div></div>
+  </section>
+
+  <section class="profile-section card mb-4" aria-labelledby="family-heading">
+    <div class="profile-section-header"><div class="section-icon" aria-hidden="true"><i class="bi bi-people"></i></div><div><h2 id="family-heading">Family background</h2><p>Share the family information needed to understand your circumstances.</p></div></div>
+    <div class="card-body"><div class="row g-4">
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.father_name %}</div>
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.father_occupation %}</div>
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.mother_name %}</div>
+      <div class="col-md-6">{% include 'student/_profile_field.html' with field=form.mother_occupation %}</div>
+      <div class="col-12">{% include 'student/_profile_field.html' with field=form.guardian_information hint='Include their name, relationship to you, and contact details if applicable.' %}</div>
+    </div></div>
+  </section>
+
+  <section class="profile-section card mb-4" aria-labelledby="support-heading">
+    <div class="profile-section-header"><div class="section-icon" aria-hidden="true"><i class="bi bi-life-preserver"></i></div><div><h2 id="support-heading">Financial and support needs</h2><p>This helps the committee assess your need fairly and consistently.</p></div></div>
+    <div class="card-body"><div class="row g-4">
+      <div class="col-md-4">{% include 'student/_profile_field.html' with field=form.number_of_dependants %}</div>
+      <div class="col-md-4">{% include 'student/_profile_field.html' with field=form.household_income_range %}</div>
+      <div class="col-md-4">{% include 'student/_profile_field.html' with field=form.orphan_status %}</div>
+      <div class="col-12">{% include 'student/_profile_field.html' with field=form.disability_information hint='Share any disability or accessibility support information you would like the committee to consider.' %}</div>
+      <div class="col-12">{% include 'student/_profile_field.html' with field=form.financial_circumstances hint='Briefly describe the financial circumstances affecting your education.' %}</div>
+    </div></div>
+  </section>
+
+  <div class="profile-actions d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3"><p class="text-muted mb-0"><i class="bi bi-shield-check me-1" aria-hidden="true"></i>Your information is handled securely.</p><button type="submit" class="btn btn-primary"><i class="bi bi-check2 me-2" aria-hidden="true"></i>Save profile</button></div>
+</form>
 {% endblock %}

@@ -7,6 +7,11 @@ from studentsApp.models import StudentProfile
 
 @receiver(post_save, sender=CustomUser)
 def create_student_related_records(sender, instance, created, **kwargs):
+    """
+    Automatically create student-related records when a student account
+    is successfully created.
+    """
+
     if not created:
         return
 

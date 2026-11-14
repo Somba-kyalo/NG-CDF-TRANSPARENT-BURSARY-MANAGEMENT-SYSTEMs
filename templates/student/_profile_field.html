@@ -1,0 +1,6 @@
+<div class="profile-field{% if field.errors %} has-error{% endif %}">
+  {{ field.label_tag }}
+  {{ field }}
+  {% if hint %}<div class="field-hint">{{ hint }}</div>{% endif %}
+  {% if field.errors %}<div class="field-errors" role="alert">{{ field.errors }}</div>{% endif %}
+</div>
